@@ -26,23 +26,25 @@ public class CommentService {
     }
 
     public CommentDTO.CommentResponse getCommentsByPostId(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("Post not found with id " + postId));
-        List<Comment> comments = commentRepository.findByPost(post);
-        List<CommentDTO.CommentResponse.Comment> commentResponses = comments.stream()
-                .map(comment -> new CommentDTO.CommentResponse.Comment(
-                        comment.getAuthor(),
-                        comment.getContent(),
-                        comment.getCreatedAt()))
-                .collect(Collectors.toList());
-        return new CommentDTO.CommentResponse(commentResponses);
+        if (postRepository.existsById(postId)) {
+            List<Comment> comments = commentRepository.findByPostId(postId);
+            List<CommentDTO.CommentResponse.Comment> commentResponses = comments.stream()
+                    .map(comment -> new CommentDTO.CommentResponse.Comment(
+                            comment.getAuthor(),
+                            comment.getContent(),
+                            comment.getCreatedAt()))
+                    .collect(Collectors.toList());
+            return new CommentDTO.CommentResponse(commentResponses);
+        } else {
+            throw new PostNotFoundException("Post not found with id " + postId);
+        }
     }
 
     public void createComment(Long postId, CommentDTO.CreateCommentRequest request) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("Post not found with id " + postId));
         Comment comment = new Comment(post,
                 request.getAuthor(),
-                request.getContent(),
-                LocalDateTime.now());
+                request.getContent());
         commentRepository.save(comment);
     }
 

@@ -27,15 +27,19 @@ public class Comment {
     @Column(nullable = false)
     private String content;
 
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
     @Builder
-    public Comment(Post post, String author, String content, LocalDateTime createdAt) {
+    public Comment(Post post, String author, String content) {
         this.post = post;
         this.author = author;
         this.content = content;
-        this.createdAt = createdAt;
     }
 
 }
