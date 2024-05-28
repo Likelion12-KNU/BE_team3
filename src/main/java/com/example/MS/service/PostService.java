@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -17,6 +19,21 @@ public class PostService {
     @Autowired
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
+    }
+
+
+    public PostDTO.BoardListResponse getBoardList() {
+        List<Post> posts = postRepository.findAll();
+        List<PostDTO.BoardListResponse.Posts> boardlist = posts.stream()
+                .map(post -> new PostDTO.BoardListResponse.Posts(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getAuthor(),
+                        post.getLikes(),
+                        post.getDislikes(),
+                        post.getCreatedAt()))
+                .collect(Collectors.toList());
+        return new PostDTO.BoardListResponse(boardlist);
     }
 
     public PostDTO.PostResponse getPostById(Long id) {
@@ -35,6 +52,20 @@ public class PostService {
         } else {
             throw new PostNotFoundException("Post not found with id " + id);
         }
+    }
+
+    public PostDTO.LikePostResponse updateLikes(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post not found with id " + id));
+        post.setLikes(post.getLikes() + 1);
+        postRepository.save(post);
+        return new PostDTO.LikePostResponse(post.getLikes());
+    }
+
+    public PostDTO.DislikePostResponse updateDislikes(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post not found with id " + id));
+        post.setDislikes(post.getDislikes() + 1);
+        postRepository.save(post);
+        return new PostDTO.DislikePostResponse(post.getDislikes());
     }
 
 }

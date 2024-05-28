@@ -18,10 +18,27 @@ public class PostController {
         this.postService = postService;
     }
 
+    @GetMapping()
+    public ResponseEntity<PostDTO.BoardListResponse> getBoardList() {
+        PostDTO.BoardListResponse boardListResponse = postService.getBoardList();
+        return ResponseEntity.ok(boardListResponse);
+    }
+
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDTO.PostResponse> getPost(@PathVariable Long postId) {
         PostDTO.PostResponse postResponse = postService.getPostById(postId);
         return ResponseEntity.ok(postResponse);
     }
 
+    @PutMapping("/posts/{id}/like")
+    public ResponseEntity<PostDTO.LikePostResponse> likePost(@PathVariable Long id) {
+        PostDTO.LikePostResponse response = postService.updateLikes(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/posts/{id}/dislike")
+    public ResponseEntity<PostDTO.DislikePostResponse> dislikePost(@PathVariable Long id) {
+        PostDTO.DislikePostResponse response = postService.updateDislikes(id);
+        return ResponseEntity.ok(response);
+    }
 }

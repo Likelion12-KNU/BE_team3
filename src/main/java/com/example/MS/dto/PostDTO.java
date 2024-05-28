@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PostDTO {
-
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -20,4 +20,19 @@ public class PostDTO {
         private int likes;
         private int dislikes;
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LikePostResponse {
+        private int likes;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DislikePostResponse {
+        private int dislikes;
+    }
+
 }
