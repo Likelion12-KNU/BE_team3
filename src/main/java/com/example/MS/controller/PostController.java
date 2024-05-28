@@ -18,12 +18,6 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping()
-    public ResponseEntity<PostDTO.BoardListResponse> getBoardList() {
-        PostDTO.BoardListResponse boardListResponse = postService.getBoardList();
-        return ResponseEntity.ok(boardListResponse);
-    }
-
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDTO.PostResponse> getPost(@PathVariable Long postId) {
         PostDTO.PostResponse postResponse = postService.getPostById(postId);
