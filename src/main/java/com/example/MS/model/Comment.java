@@ -21,13 +21,13 @@ public class Comment {
     @JoinColumn(name = "postId", nullable = false, foreignKey = @ForeignKey(name = "fk_comments_posts", foreignKeyDefinition = "FOREIGN KEY (postId) REFERENCES posts(id) ON DELETE CASCADE"))
     private Post post;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(100)")
     private String author;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
     @PrePersist
