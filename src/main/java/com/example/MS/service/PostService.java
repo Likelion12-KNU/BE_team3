@@ -20,21 +20,7 @@ public class PostService {
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
-
-
-    public PostDTO.BoardListResponse getBoardList() {
-        List<Post> posts = postRepository.findAll();
-        List<PostDTO.BoardListResponse.Posts> boardlist = posts.stream()
-                .map(post -> new PostDTO.BoardListResponse.Posts(
-                        post.getId(),
-                        post.getTitle(),
-                        post.getAuthor(),
-                        post.getLikes(),
-                        post.getDislikes(),
-                        post.getCreatedAt()))
-                .collect(Collectors.toList());
-        return new PostDTO.BoardListResponse(boardlist);
-    }
+    
 
     public PostDTO.PostResponse getPostById(Long id) {
         Optional<Post> postOptional = postRepository.findById(id);
